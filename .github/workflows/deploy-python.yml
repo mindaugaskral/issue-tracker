@@ -30,5 +30,7 @@ jobs:
 
       # 4️⃣ Run Ansible Playbook
       - name: Run Ansible Playbook for Deployment
+        env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i "${{ github.event.inputs.AWS_HOST }}," -u ubuntu --private-key ~/.ssh/raktas.pem deploy_app.yml

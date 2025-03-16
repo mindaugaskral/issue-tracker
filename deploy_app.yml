@@ -6,7 +6,7 @@
   tasks:
     # 1️⃣ Pull the latest image from Docker Hub
     - name: Pull latest Docker image
-      command: docker pull "{{ secrets.DOCKER_USERNAME }}/issue-tracker:latest"
+      command: docker pull "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
 
     # 2️⃣ Stop and remove old container
     - name: Stop and remove old container
@@ -24,7 +24,7 @@
         -e DB_NAME="{{ secrets.DB_NAME }}"
         -e DB_USER="{{ secrets.DB_USER }}"
         -e DB_PASSWORD="{{ secrets.DB_PASSWORD }}"
-        "{{ secrets.DOCKER_USERNAME }}/issue-tracker:latest"
+        "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
 
     # 4️⃣ Restart Nginx
     - name: Restart Nginx
