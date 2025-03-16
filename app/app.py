@@ -23,11 +23,11 @@ class Issue(db.Model):
     description = db.Column(db.String(255), nullable=False)
     resolved = db.Column(db.Boolean, default=False)
 
-# ✅ Create database tables when the app starts
-@app.before_first_request
-def create_tables():
-    db.create_all()
-    
+# # ✅ Create database tables when the app starts
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
+
 # Ensure database tables are created
 def wait_for_mysql():
     """Waits for MySQL to be ready before starting Flask"""
