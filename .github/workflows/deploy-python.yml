@@ -24,7 +24,7 @@ jobs:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/raktas.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/raktas.pem
           chmod 600 ~/.ssh/raktas.pem
           ssh-keyscan -H ${{ github.event.inputs.AWS_HOST }} > ~/.ssh/known_hosts
 
