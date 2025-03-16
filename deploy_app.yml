@@ -10,7 +10,8 @@
 
     # 2️⃣ Stop and remove old container
     - name: Stop and remove old container
-      command: docker stop issue-tracker-app && docker rm issue-tracker-app
+      shell: |
+        docker ps -a --format '{{ '{{' }} .Names {{ '}}' }}' | grep -w issue-tracker-app && docker stop issue-tracker-app && docker rm issue-tracker-app || true
       ignore_errors: yes
 
     # 3️⃣ Start Flask container
