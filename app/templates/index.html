@@ -71,7 +71,6 @@
             <th>ID</th>
             <th>Description</th>
             <th>Status</th>
-            <!-- <th>Created At</th> -->
             <th>Action</th>
         </tr>
         {% for issue in issues %}
@@ -79,7 +78,6 @@
             <td>{{ issue.id }}</td>
             <td>{{ issue.description }}</td>
             <td>{% if issue.resolved %} ✅ Resolved {% else %} ❌ Open {% endif %}</td>
-            <!-- <td>{{ issue.created_at.strftime('%Y-%m-%d %H:%M') }}</td> -->
             <td>
                 {% if not issue.resolved %}
                 <a href="/resolve/{{ issue.id }}">Mark as Resolved</a>
