@@ -19,11 +19,11 @@
         docker run -d --name issue-tracker-app
         -p 80:5000
         --network issue-tracker-network
-        -e DB_HOST=issue-tracker-db
+        -e DB_HOST={{ secrets.DB_HOST }}
         -e DB_PORT=3306
-        -e DB_NAME=issue_tracker
-        -e DB_USER=laravel
-        -e DB_PASSWORD=securepassword
+        -e DB_NAME="{{ secrets.DB_NAME }}"
+        -e DB_USER="{{ secrets.DB_USER }}"
+        -e DB_PASSWORD="{{ secrets.DB_PASSWORD }}"
         "{{ secrets.DOCKER_USERNAME }}/issue-tracker:latest"
 
     # 4️⃣ Restart Nginx
