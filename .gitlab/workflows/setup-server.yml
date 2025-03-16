@@ -1,0 +1,34 @@
+name: Setup EC2 Server with Ansible
+
+on:
+  workflow_dispatch:  # Run manually for initial setup
+    inputs:
+      AWS_HOST:
+        description: "EC2 Instance IP Address"
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout Code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Install Ansible
+      - name: Install Ansible
+        run: sudo apt update && sudo apt install -y ansible
+
+      # 3️⃣ Setup SSH Key for Ansible
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/raktas.pem
+          chmod 600 ~/.ssh/raktas.pem
+          ssh-keyscan -H ${{ github.event.inputs.AWS_HOST }} >> ~/.ssh/known_hosts
+
+      # 4️⃣ Run Ansible Playbook to Setup Server
+      - name: Run Ansible Playbook for Setup
+        run: |
+          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i "${{ github.event.inputs.AWS_HOST }}," -u ubuntu --private-key ~/.ssh/raktas.pem setup_server.yml

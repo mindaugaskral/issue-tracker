@@ -1,0 +1,73 @@
+name: Deploy AWS Infrastructure with Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Terraform Action (init, plan, apply, destroy)"
+        required: true
+        default: "plan"
+        type: choice
+        options:
+          - init
+          - plan
+          - apply
+          - destroy
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout Repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Terraform CLI
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7  # Adjust based on your Terraform version
+
+      # 3️⃣ Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1  # Adjust region if needed
+
+      # 4️⃣ Initialize Terraform
+      - name: Terraform Init
+        if: ${{ github.event.inputs.action == 'init' || github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy' }}
+        run: terraform init
+
+      # 5️⃣ Validate Terraform Configuration
+      - name: Terraform Validate
+        if: ${{ github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' }}
+        run: terraform validate
+
+      # 6️⃣ Terraform Plan
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.action == 'plan' }}
+        run: terraform plan
+
+      # 7️⃣ Terraform Apply
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform apply -auto-approve
+
+      # 8️⃣ Terraform Destroy
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve
+      
+      # 8️⃣ Terraform Apply Before Destroy (Ensures State is Synced)
+      - name: Terraform Refresh & Apply Before Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform apply -refresh-only -auto-approve
+
+      # 9️⃣ Terraform Destroy
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve

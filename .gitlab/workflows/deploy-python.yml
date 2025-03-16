@@ -1,0 +1,35 @@
+name: Deploy Flask App via Ansible
+
+on:
+  workflow_dispatch:  # Manually triggered
+      inputs:
+      AWS_HOST:
+        description: "EC2 Instance IP Address"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout Code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Install Ansible
+      - name: Install Ansible
+        run: sudo apt update && sudo apt install -y ansible
+
+      # 3️⃣ Setup SSH Key for Ansible
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/raktas.pem
+          chmod 600 ~/.ssh/raktas.pem
+          ssh-keyscan -H ${{ github.event.inputs.AWS_HOST }} > ~/.ssh/known_hosts
+
+      # 4️⃣ Run Ansible Playbook
+      - name: Run Ansible Playbook for Deployment
+        run: |
+          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i "${{ github.event.inputs.AWS_HOST }}," -u ubuntu --private-key ~/.ssh/raktas.pem deploy_app.yml
+          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ${{ github.event.inputs.AWS_HOST }}, -u ${{ github.event.inputs.AWS_USER }} --private-key ~/.ssh/raktas.pem deploy_app.yml
