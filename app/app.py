@@ -23,12 +23,7 @@ class Issue(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String(255), nullable=False)
     resolved = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-
-# # ✅ Create database tables when the app starts
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now(datetime.timezone.utc))
 
 # Ensure database tables are created
 def wait_for_mysql():
