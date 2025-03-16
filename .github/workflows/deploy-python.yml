@@ -2,7 +2,7 @@ name: Deploy Flask App via Ansible
 
 on:
   workflow_dispatch:  # Manually triggered
-      inputs:
+    inputs:
       AWS_HOST:
         description: "EC2 Instance IP Address"
         required: true
