@@ -40,13 +40,13 @@
       ignore_errors: yes
 
     # 5️⃣ Run MySQL Container
-    - name: Run MySQL container
-      command: >
-        docker run -d --name issue-tracker-db
-        -e MYSQL_ROOT_PASSWORD=rootpassword
-        -e MYSQL_DATABASE=issue_tracker
-        -e MYSQL_USER=laravel
-        -e MYSQL_PASSWORD=securepassword
-        -p 3306:3306
-        --network issue-tracker-network
-        mysql:8.0
+    # - name: Run MySQL container
+    #   command: >
+    #     docker run -d --name issue-tracker-db
+    #     -e MYSQL_ROOT_PASSWORD=rootpassword
+    #     -e MYSQL_DATABASE=issue_tracker
+    #     -e MYSQL_USER=laravel
+    #     -e MYSQL_PASSWORD=securepassword
+    #     -p 3306:3306
+    #     --network issue-tracker-network
+    #     mysql:8.0
