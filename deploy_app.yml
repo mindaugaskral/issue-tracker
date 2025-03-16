@@ -17,7 +17,7 @@
     - name: Run Flask app container
       command: >
         docker run -d --name issue-tracker-app
-        -p 80:5000
+        -p 8080:5000
         --network issue-tracker-network
         -e DB_HOST={{ secrets.DB_HOST }}
         -e DB_PORT=3306
