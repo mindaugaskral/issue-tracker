@@ -4,6 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Issue Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        form, table {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .history-link {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <h2>Submit an Issue</h2>
@@ -14,11 +66,12 @@
     </form>
 
     <h2>Issue List</h2>
-    <table border="1">
+    <table>
         <tr>
             <th>ID</th>
             <th>Description</th>
             <th>Status</th>
+            <th>Created At</th>
             <th>Action</th>
         </tr>
         {% for issue in issues %}
@@ -26,6 +79,7 @@
             <td>{{ issue.id }}</td>
             <td>{{ issue.description }}</td>
             <td>{% if issue.resolved %} ✅ Resolved {% else %} ❌ Open {% endif %}</td>
+            <td>{{ issue.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>
                 {% if not issue.resolved %}
                 <a href="/resolve/{{ issue.id }}">Mark as Resolved</a>
@@ -36,5 +90,7 @@
         </tr>
         {% endfor %}
     </table>
+
+    <a href="/history" class="history-link">🔍 View Issue History</a>
 </body>
 </html>
