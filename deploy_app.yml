@@ -6,7 +6,7 @@
   tasks:
     # 1️⃣ Pull the latest image from Docker Hub
     - name: Pull latest Docker image
-      command: docker pull "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
+      command: docker pull "{{ secrets.DOCKER_USERNAME }}/issue-tracker:latest"
 
     # 2️⃣ Stop and remove old container
     - name: Stop and remove old container
@@ -24,7 +24,7 @@
         -e DB_NAME=issue_tracker
         -e DB_USER=laravel
         -e DB_PASSWORD=securepassword
-        "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
+        "{{ secrets.DOCKER_USERNAME }}/issue-tracker:latest"
 
     # 4️⃣ Restart Nginx
     - name: Restart Nginx
