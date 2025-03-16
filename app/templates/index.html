@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Tracker</title>
+</head>
+<body>
+    <h2>Submit an Issue</h2>
+    <form action="/submit" method="POST">
+        <label for="issue">Describe the Issue:</label>
+        <input type="text" id="issue" name="issue" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Issue List</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for issue in issues %}
+        <tr>
+            <td>{{ issue.id }}</td>
+            <td>{{ issue.description }}</td>
+            <td>{% if issue.resolved %} ✅ Resolved {% else %} ❌ Open {% endif %}</td>
+            <td>
+                {% if not issue.resolved %}
+                <a href="/resolve/{{ issue.id }}">Mark as Resolved</a>
+                {% else %}
+                ✔
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
