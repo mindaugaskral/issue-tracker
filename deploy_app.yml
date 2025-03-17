@@ -4,17 +4,14 @@
   become: yes
 
   tasks:
-    # 1️⃣ Pull the latest image from Docker Hub
     - name: Pull latest Docker image
       command: docker pull "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
 
-    # 2️⃣ Stop and remove old container
     - name: Stop and remove old container
       shell: |
         docker ps -a --format '{{ '{{' }} .Names {{ '}}' }}' | grep -w issue-tracker-app && docker stop issue-tracker-app && docker rm issue-tracker-app || true
       ignore_errors: yes
 
-    # 3️⃣ Start Flask container
     - name: Run Flask app container
       command: >
         docker run -d --name issue-tracker-app
@@ -27,7 +24,6 @@
         -e DB_PASSWORD=securepassword
         "{{ lookup('env', 'DOCKER_USERNAME') }}/issue-tracker:latest"
 
-    # 4️⃣ Restart Nginx
     - name: Restart Nginx
       service:
         name: nginx

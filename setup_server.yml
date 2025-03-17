@@ -4,7 +4,6 @@
   become: yes
 
   tasks:
-    # 1️⃣ Update & Install Dependencies
     - name: Update system packages
       apt:
         update_cache: yes
@@ -17,7 +16,6 @@
           - nginx
         state: present
 
-    # 2️⃣ Start and Enable Services
     - name: Start Docker and Nginx
       service:
         name: "{{ item }}"
@@ -27,26 +25,12 @@
         - docker
         - nginx
 
-    # 3️⃣ Add Ubuntu User to Docker Group
     - name: Add ubuntu user to docker group
       user:
         name: ubuntu
         groups: docker
         append: yes
 
-    # 4️⃣ Create Docker Network
     - name: Create Docker network
       command: docker network create issue-tracker-network
       ignore_errors: yes
-
-    # 5️⃣ Run MySQL Container
-    # - name: Run MySQL container
-    #   command: >
-    #     docker run -d --name issue-tracker-db
-    #     -e MYSQL_ROOT_PASSWORD=rootpassword
-    #     -e MYSQL_DATABASE=issue_tracker
-    #     -e MYSQL_USER=laravel
-    #     -e MYSQL_PASSWORD=securepassword
-    #     -p 3306:3306
-    #     --network issue-tracker-network
-    #     mysql:8.0
